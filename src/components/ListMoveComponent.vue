@@ -8,11 +8,12 @@ const props = defineProps<{
     type: string;
     date: string;
     amount: number;
+    isoDate: string;
   }[];
 }>();
 
 const sortedMoves = computed(() => {
-  return [...props.moves].sort((a, b) => b.id.localeCompare(a.id));
+  return [...props.moves].sort((a, b) => new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime());
 });
 
 </script>

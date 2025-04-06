@@ -3,6 +3,8 @@ const props = defineProps<{
   balance: number;
   inputs: number;
   outputs: number;
+  primeraFecha: string;
+  ultimaFecha: string;
 }>();
 </script>
 
@@ -30,7 +32,7 @@ const props = defineProps<{
           </RouterLink>
         </div>
         <div class="stat-desc mt-1 text-primary">
-          Del 1 de enero al 1 de febrero
+          Del {{props.primeraFecha}} al {{props.ultimaFecha}}
         </div>
       </div>
 

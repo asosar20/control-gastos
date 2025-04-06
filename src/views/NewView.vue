@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useStorage } from "@vueuse/core";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 const emit = defineEmits(["guardar"]);
 
 const nombre = ref("");
@@ -26,7 +27,7 @@ onMounted(() => {
   hora.value = `${horas}:${minutos}`;
 });
 
-function guardar() {
+function guardar(salir = false) {
   if (
     !nombre.value ||
     !monto.value ||
@@ -64,18 +65,22 @@ function guardar() {
   emit("guardar", nuevoMovimiento);
   movimientos.value.push(nuevoMovimiento);
 
-  nombre.value = "";
-  monto.value = null;
-  tipo.value = "Ingresos";
-
-  const ahora = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "America/Lima" })
-  );
-  fecha.value = ahora.toISOString().split("T")[0];
-  hora.value = `${ahora.getHours().toString().padStart(2, "0")}:${ahora
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}`;
+  if (salir) {
+    router.push('/');
+  } else {
+    nombre.value = "";
+    monto.value = null;
+    tipo.value = route.query.tipo?.toString() || "Ingresos";
+    
+    const ahora = new Date(
+      new Date().toLocaleString("en-US", { timeZone: "America/Lima" })
+    );
+    fecha.value = ahora.toISOString().split("T")[0];
+    hora.value = `${ahora.getHours().toString().padStart(2, "0")}:${ahora
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+  }
 }
 </script>
 
@@ -124,12 +129,16 @@ function guardar() {
         <input v-model="hora" type="time" class="input w-full" />
       </div>
 
-      <button @click="guardar" class="btn btn-dash btn-primary w-full">
-        Guardar
+      <button @click="() => guardar(true)" class="btn btn-dash btn-primary w-full">
+        GUARDAR Y SALIR
+      </button>
+
+      <button @click="() => guardar(false)" class="btn btn-dash btn-secondary w-full">
+        GUARDAR Y AGREGAR OTRO
       </button>
       
       <RouterLink to="/">
-        <button @click="guardar" class="btn btn-dash btn-error w-full">Cancelar</button>
+        <button class="btn btn-dash btn-error w-full">CANCELAR</button>
       </RouterLink>
     </fieldset>
   </div>

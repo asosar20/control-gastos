@@ -37,13 +37,9 @@ function guardar(salir = false) {
   )
     return;
 
-  const fechaCompleta = new Date(`${fecha.value}T${hora.value}`);
+    const fechaCompleta = new Date(`${fecha.value}T${hora.value}:00-05:00`);
 
-  const fechaEnPeru = new Date(
-    fechaCompleta.toLocaleString("en-US", { timeZone: "America/Lima" })
-  );
-
-  const formatter = new Intl.DateTimeFormat("es-PE", {
+    const formatter = new Intl.DateTimeFormat("es-PE", {
     day: "2-digit",
     month: "long",
     year: "numeric",
@@ -54,11 +50,11 @@ function guardar(salir = false) {
   });
 
   const nuevoMovimiento = {
-    id: Date.now().toString(),
+    id: fechaCompleta.getTime().toString(),
     name: nombre.value,
     type: tipo.value,
-    date: formatter.format(fechaEnPeru),
-    isoDate: fechaEnPeru.toISOString(),
+    date: formatter.format(fechaCompleta),
+    isoDate: fechaCompleta.toISOString(),
     amount: monto.value,
   };
 

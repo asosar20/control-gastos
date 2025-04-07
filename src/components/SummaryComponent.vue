@@ -47,7 +47,9 @@ const props = defineProps<{
           ${{ props.inputs.toLocaleString() }}
         </div>
         <div class="stat-actions">
-          <button class="btn btn-xs btn-dash btn-accent">Ver todo</button>
+          <RouterLink to="time-input-output">
+            <button class="btn btn-xs btn-dash btn-accent">Ver todo</button>
+          </RouterLink>
         </div>
         <div class="stat-desc text-accent mt-1">↗︎</div>
       </div>
@@ -60,7 +62,9 @@ const props = defineProps<{
           ${{ props.outputs.toLocaleString() }}
         </div>
         <div class="stat-actions">
-          <button class="btn btn-xs btn-dash btn-secondary">Ver todo</button>
+          <RouterLink to="time-input-output">
+            <button class="btn btn-xs btn-dash btn-accent">Ver todo</button>
+          </RouterLink>
         </div>
         <div class="stat-desc text-secondary mt-1">↘︎</div>
       </div>

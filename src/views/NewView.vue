@@ -16,30 +16,41 @@ const hora = ref("");
 const movimientos = useStorage("movimientos", [] as any[]);
 
 onMounted(() => {
-  const ahoraEnPeru = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "America/Lima" })
-  );
-
-  fecha.value = ahoraEnPeru.toISOString().split("T")[0];
-
-  const horas = ahoraEnPeru.getHours().toString().padStart(2, "0");
-  const minutos = ahoraEnPeru.getMinutes().toString().padStart(2, "0");
-  hora.value = `${horas}:${minutos}`;
+  const options: Intl.DateTimeFormatOptions = { 
+    timeZone: 'America/Lima',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  };
+  
+  const peruDateTime = new Date().toLocaleString('en-US', options);
+  const [date, time] = peruDateTime.split(', ');
+  const [month, day, year] = date.split('/');
+  
+  fecha.value = `${year}-${month}-${day}`;
+  hora.value = time;
 });
 
 function guardar(salir = false) {
-  if (
-    !nombre.value ||
-    !monto.value ||
-    !fecha.value ||
-    !hora.value ||
-    monto.value <= 0
-  )
-    return;
+  if (!nombre.value || !monto.value || !fecha.value || !hora.value || monto.value <= 0) return;
 
-    const fechaCompleta = new Date(`${fecha.value}T${hora.value}:00-05:00`);
+  const [year, month, day] = fecha.value.split('-');
+  const [hours, minutes] = hora.value.split(':');
+  
+  const fechaCompleta = new Date(
+    Date.UTC(
+      parseInt(year),
+      parseInt(month) - 1,
+      parseInt(day),
+      parseInt(hours) + 5, // Ajuste para UTC-5 (Perú)
+      parseInt(minutes)
+    )
+  );
 
-    const formatter = new Intl.DateTimeFormat("es-PE", {
+  const formatter = new Intl.DateTimeFormat("es-PE", {
     day: "2-digit",
     month: "long",
     year: "numeric",
@@ -50,7 +61,7 @@ function guardar(salir = false) {
   });
 
   const nuevoMovimiento = {
-    id: fechaCompleta.getTime().toString(),
+    id: Date.now().toString(),
     name: nombre.value,
     type: tipo.value,
     date: formatter.format(fechaCompleta),
@@ -68,14 +79,22 @@ function guardar(salir = false) {
     monto.value = null;
     tipo.value = route.query.tipo?.toString() || "Ingresos";
     
-    const ahora = new Date(
-      new Date().toLocaleString("en-US", { timeZone: "America/Lima" })
-    );
-    fecha.value = ahora.toISOString().split("T")[0];
-    hora.value = `${ahora.getHours().toString().padStart(2, "0")}:${ahora
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}`;
+    const options: Intl.DateTimeFormatOptions = { 
+      timeZone: 'America/Lima',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    };
+    
+    const peruDateTime = new Date().toLocaleString('en-US', options);
+    const [date, time] = peruDateTime.split(', ');
+    const [month, day, year] = date.split('/');
+    
+    fecha.value = `${year}-${month}-${day}`;
+    hora.value = time;
   }
 }
 </script>

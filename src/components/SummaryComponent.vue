@@ -63,7 +63,7 @@ const props = defineProps<{
         </div>
         <div class="stat-actions">
           <RouterLink to="time-input-output">
-            <button class="btn btn-xs btn-dash btn-accent">Ver todo</button>
+            <button class="btn btn-xs btn-dash btn-secondary">Ver todo</button>
           </RouterLink>
         </div>
         <div class="stat-desc text-secondary mt-1">↘︎</div>

@@ -31,8 +31,11 @@ const props = defineProps<{
           </button>  
           </RouterLink>
         </div>
-        <div class="stat-desc mt-1 text-primary">
+        <div class="stat-desc mt-1 text-primary" v-if="props.primeraFecha">
           Del {{props.primeraFecha}} al {{props.ultimaFecha}}
+        </div>
+        <div v-elfe class="stat-desc mt-1 text-primary">
+          No hay registros
         </div>
       </div>
 
